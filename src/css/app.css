@@ -112,7 +112,7 @@ body {
   max-width: 1400px;
   height: 100vh;
   margin: 0 auto;
-  overflow: hidden;
+  overflow: auto;
   background-color: var(--theme-bg-color);
 }
 
@@ -515,6 +515,22 @@ body {
     grid-template-columns: repeat(1, 1fr);
   }
 }
+@media screen and (max-width: 570px) {
+  .job-cards {
+    flex-basis: 82%;
+max-height: 100vh;
+overflow-y: scroll;
+overflow-x: hidden;
+/* border: 1px solid gray; */
+-ms-scroll-snap-type: y mandatory;
+scroll-snap-type: y mandatory;
+  }
+}
+@media screen and (min-height: 620px) {
+  .job-cards {
+    flex-basis: 80%;
+  }
+}
 
 .job-card {
   padding: 20px 16px;
@@ -523,6 +539,21 @@ body {
   cursor: pointer;
   -webkit-transition: .2s;
   transition: .2s;
+  /* border-bottom: 1px solid white; */
+/* padding: 3rem; */
+/* font-size: 1.4rem; */
+/* color: rgba(255, 255, 255, 0.5); */
+/* background: lightgray; */
+/* text-align: center; */
+scroll-snap-align: start;
+display: -webkit-box;
+display: flex;
+-webkit-box-orient: vertical;
+-webkit-box-direction: normal;
+  flex-flow: column;
+-webkit-box-pack: center;
+  justify-content: center;
+  min-height: 55vh;
 }
 .job-card:hover {
   -webkit-transform: scale(1.02);

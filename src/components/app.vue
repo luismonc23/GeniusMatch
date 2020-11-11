@@ -62,34 +62,128 @@
       </f7-view>
     </f7-popup>
 
-    <f7-login-screen id="my-login-screen">
-      <f7-view>
-        <f7-page login-screen>
-          <f7-login-screen-title>Login</f7-login-screen-title>
-          <f7-list form>
-            <f7-list-input
-              type="text"
-              name="username"
-              placeholder="Your username"
-              :value="username"
-              @input="username = $event.target.value"
-            ></f7-list-input>
-            <f7-list-input
-              type="password"
-              name="password"
-              placeholder="Your password"
-              :value="password"
-              @input="password = $event.target.value"
-            ></f7-list-input>
-          </f7-list>
-          <f7-list>
-            <f7-list-button title="Sign In" @click="alertLoginData"></f7-list-button>
-            <f7-block-footer>
-              Some text about login information.<br>Click "Sign In" to close Login Screen
-            </f7-block-footer>
-          </f7-list>
-        </f7-page>
-      </f7-view>
+    <f7-login-screen class="login-screen" id="login-screen" :opened="$root.loginScreenOpened" @loginscreen:closed="$root.loginScreenOpened = false">
+      <f7-page login-screen>
+        <f7-login-screen-title>
+
+          {{ $root.signingUp ? 'Registrarse' : 'Ingresar'  }}
+
+        </f7-login-screen-title>
+        <f7-list form>
+          <f7-list-input
+            v-if="!$root.signingUp"
+            label="Dirección de email"
+            type="email"
+            name="email"
+            placeholder="Tu dirección de correo electrónico"
+            :value="$root.username"
+            @input="$root.username = $event.target.value"
+            validate
+            required
+            clear-button
+          ></f7-list-input>
+          <f7-list-input
+            v-if="!$root.signingUp"
+            label="Contraseña"
+            type="password"
+            name="password"
+            placeholder="Tu contraseña"
+            :value="$root.password"
+            @input="$root.password = $event.target.value"
+            validate
+            required
+            clear-button
+          ></f7-list-input>
+        </f7-list>
+        <f7-list>
+          <f7-button v-if="!$root.signingUp" large fill raised @click="$root.login()">Entrar</f7-button>
+
+          <hr v-if="!$root.signingUp" style="width: 70%">
+
+          <f7-button v-if="!$root.signingUp" large fill raised @click="$root.signingUp = true" color="green">Crear cuenta</f7-button>
+
+          <br>
+          <f7-button v-if="!$root.signingUp" big fill raised @click="" color="blue">Log in con LinkedIn</f7-button>
+
+        </f7-list>
+        <f7-list form class="signupform" v-if="$root.signingUp">
+              <f7-list-input
+                name="name"
+                label="Nombre"
+                type="text"
+                placeholder="Tu nombre"
+                validate
+                required
+                clear-button
+              />
+              <f7-list-input
+                name="lastname"
+                label="Apellido"
+                type="text"
+                placeholder="Tu primer apellido"
+                validate
+                required
+                clear-button
+              />
+          <f7-list-input
+            name="email"
+            label="E-mail"
+            type="email"
+            placeholder="Tu dirección de correo electrónico"
+            validate
+            required
+            clear-button
+          />
+          <f7-list-input
+            name="password"
+            label="Contraseña"
+            type="password"
+            placeholder="Selecciona una contraseña"
+            validate
+            required
+            clear-button
+          />
+          <!-- <f7-list-input
+            name="confirm_pass"
+            label="Confirmar contraseña"
+            type="password"
+            placeholder="Confirma la contraseña"
+            validate
+            required
+            clear-button
+          /> -->
+          <f7-list-input
+            name="phone"
+            label="CV"
+            type="textarea"
+            placeholder="Pega aquí la información de tu CV, obtendremos la información clave automáticamente, pero siempre podrás editarla"
+            validate
+            required
+            clear-button
+          />
+          <f7-list-input
+            name="phone"
+            label="Valores de trabajo"
+            type="textarea"
+            placeholder="Describe tu forma de trabajo de manera personal, en un nivel no técnico, para asegurar un match más adecuado"
+            validate
+            required
+            clear-button
+          />
+        </f7-list>
+        <f7-list v-if="$root.signingUp">
+          <f7-block strong>
+            <p>Al continuar, aceptas nuestra <f7-link external>Política de Privacidad y Términos y Condiciones</f7-link></p>
+          </f7-block>
+
+          <f7-button large fill raised @click="signup()">Registrarse</f7-button>
+
+          <hr style="width: 70%">
+
+          <f7-button large fill raised @click="$root.signingUp = false" color="green">Ya tengo cuenta</f7-button>
+
+        </f7-list>
+      </f7-page>
     </f7-login-screen>
   </f7-app>
 </template>
@@ -120,6 +214,17 @@
         this.$f7.dialog.alert('Username: ' + this.username + '<br>Password: ' + this.password, () => {
           this.$f7.loginScreen.close();
         });
+      },
+      signup() {
+        const self = this;
+        this.$f7.preloader.show();
+
+        setTimeout(function () {
+          self.$f7.preloader.hide();
+          self.$f7.dialog.alert('¡Bienvenido! Se ha procesado tu información', () => {
+            self.$f7.loginScreen.close();
+          });
+        },3000);
       }
     },
     mounted() {
