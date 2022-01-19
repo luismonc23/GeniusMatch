@@ -1,1 +1,1 @@
-PHP Project for the Jobs Hakcathon 2020 https://www.talent-land.mx
+PHP Project for the Jobs Hackathon 2020 https://www.talent-land.mx
